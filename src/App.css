@@ -26,12 +26,24 @@
 }
 
 .todo-input {
-  display: flex;
   align-items: center;
   justify-content: center;
   border-bottom: 1px solid gray;
   padding-bottom: 25px;
   margin-bottom: 20px;
+}
+
+.firstrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.secondrow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .todo-input-item {
@@ -54,12 +66,59 @@
   border: none;
 }
 
+
+
+.todo-input-item-radio input {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.todo-input-item-radio label {
+  font-weight: bold;
+}
+
+.todo-input-item-dropdown label {
+  display: flex;
+  font-weight: bold;
+  margin-right: 20px;
+  margin-bottom: 5px;
+  margin-top: 0;
+}
+
+.todo-input-item-dropdown select {
+  margin-top: 2px;
+  border: none;
+  outline: none;
+  padding: 7px;
+  font-weight: bold;
+  margin-right: 20px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+
+.todo-input-item-dropdown select option {
+  background-color: #fff;
+  color: #333;
+}
+
+.todo-input-item-dropdown select option:checked {
+  background-color: #e0e0e0;
+  color: #333;
+}
+
 .todo-input-item input:focus {
   outline: 2px solid rgb(88, 161, 194);
 }
 
+.radio-btn {
+  margin: 10px;
+  padding: 5px;
+}
+
 .primarybtn {
   width: 50px;
+  margin-left: 10px;
   margin-top: 30px;
   padding: 8px;
   cursor: pointer;
@@ -95,6 +154,14 @@
 .todo-list {
   display: flex;
   flex-direction: column;
+}
+
+.taskDetails {
+  display: flex;
+}
+
+.taskDetails p {
+  margin-right: 10px;
 }
 
 .todo-list-item {
@@ -162,12 +229,34 @@
 @media only screen and (max-width: 768px) {
   .todo-input {
     flex-direction: column;
-    align-items: center;
   }
 
   .todo-input-item {
     margin-bottom: 10px;
     width: 100%;
+  }
+
+  .firstrow {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  .secondrow {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+
+  .todo-input-item-radio {
+    margin-bottom: 10px;
+    width: 100%;
+  }
+
+  .taskDetails {
+    display: flex;
+    flex-direction: column;
   }
 
   .todo-list-item p,
@@ -178,7 +267,9 @@
   .icon,
   .eicon,
   .cicon {
-    font-size: 25px;
+    font-size: 26px;
+    margin-top: 5px;
+    margin-bottom: 10px;
   }
 
   .icon-box {

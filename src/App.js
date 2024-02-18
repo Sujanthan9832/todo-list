@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import './App.css';
+import Header from './components/Header';
 import { MdDelete } from "react-icons/md";
 import { FaCheck, FaEdit } from "react-icons/fa";
 
@@ -10,6 +11,9 @@ const App = () => {
   const [newDescription, setNewDescription] = useState("");
   const [completedTodos, setCompletedTodos] = useState([]);
   const [editIndex, setEditIndex] = useState(null);
+  const [priority, setPriority] = useState("low");
+  const [category, setCategory] = useState("personal");
+  const [dueDate, setDueDate] = useState("");
 
   const handleAddTodo = () => {
     // To Validate the title field, it shold not be empty
@@ -21,14 +25,17 @@ const App = () => {
     if (editIndex !== null) {
       // Editing an existing todo
       let updatedTodoArr = [...allTodos];
-      updatedTodoArr[editIndex] = { title: newTitle, description: newDescription };
+      updatedTodoArr[editIndex] = { title: newTitle, description: newDescription, priority: priority, category: category, dueDate: dueDate };
       setAllTodos(updatedTodoArr);
       setEditIndex(null);
     } else {
 
       let newTodoItem = {
         title: newTitle,
-        description: newDescription
+        description: newDescription,
+        priority: priority,
+        category: category,
+        dueDate: dueDate,
       }
 
       let updatedTodoArr = [...allTodos];
@@ -38,6 +45,9 @@ const App = () => {
 
     setNewTitle("");
     setNewDescription("");
+    setPriority("low");
+    setCategory("personal");
+    setDueDate("");
     localStorage.setItem('todolist', JSON.stringify(allTodos));
   };
 
@@ -45,6 +55,9 @@ const App = () => {
     setEditIndex(index);
     setNewTitle(allTodos[index].title);
     setNewDescription(allTodos[index].description);
+    setPriority(allTodos[index].priority);
+    setCategory(allTodos[index].category);
+    setDueDate(allTodos[index].dueDate);
   };
 
   useEffect(() => {
@@ -98,21 +111,56 @@ const App = () => {
 
   return (
     <div className='App'>
-      <div className='top-section'>
-        <h1>To Do</h1>
-      </div>
-
+      <Header />
       <div className='todo-wrapper'>
         <div className='todo-input'>
-          <div className='todo-input-item'>
-            <label>Title</label>
-            <input type='text' value={newTitle} onChange={(e) => setNewTitle(e.target.value)} placeholder='input the task' required />
+          <div className='firstrow'>
+            <div className='todo-input-item'>
+              <label>Title</label>
+              <input type='text' value={newTitle} onChange={(e) => setNewTitle(e.target.value)} placeholder='input the task' required />
+            </div>
+
+            <div className='todo-input-item'>
+              <label>Description</label>
+              <input type='text' value={newDescription} onChange={(e) => setNewDescription(e.target.value)} placeholder='input the description' />
+            </div>
           </div>
 
-          <div className='todo-input-item'>
-            <label>Description</label>
-            <input type='text' value={newDescription} onChange={(e) => setNewDescription(e.target.value)} placeholder='input the description' />
+          <div className='secondrow'>
+            <div className='todo-input-item-radio'>
+              <label>Priority:</label>
+              <div className='priority-radio'>
+                <label>
+                  <input className='radio-btn' type='radio' value='low' checked={priority === 'low'} onChange={() => setPriority('low')} />
+                  Low
+                </label>
+                <label>
+                  <input className='radio-btn' type='radio' value='high' checked={priority === 'high'} onChange={() => setPriority('high')} />
+                  High
+                </label>
+              </div>
+            </div>
+
+            <div className='todo-input-item-dropdown'>
+              <label>Category:</label>
+              <select value={category} onChange={(e) => setCategory(e.target.value)}>
+                <option value='personal'>Personal</option>
+                <option value='work'>Work</option>
+                <option value='other'>Other</option>
+              </select>
+            </div>
+
+            <div className='todo-input-item'>
+              <label>Due Date:</label>
+              <input
+                type='date'
+                value={dueDate}
+                onChange={(e) => setDueDate(e.target.value)}
+              />
+            </div>
+
           </div>
+
 
           <div className='todo-input-item'>
             <button type='button' onClick={handleAddTodo} className='primarybtn' >Add</button>
@@ -131,12 +179,20 @@ const App = () => {
         <div className='todo-list'>
           {/*to only show to do list*/}
           {isCompleteScreen === false && allTodos.map((item, index) => {
+            const priorityStyle = item.priority === 'high' ? { color: 'red' } : {};
             return (
               <div className='todo-list-item' key={index}>
 
                 <div className='todo-detail'>
                   <h3>{item.title}</h3>
                   <p>{item.description}</p>
+                  <div className='taskDetails'>
+                    <p><small><b>Status :</b>In Progress</small></p>
+                    <p><small><b>Category:</b> {item.category}</small></p>
+                    <p style={priorityStyle}><small><b>Priority :</b> {item.priority}</small></p>
+                    <p><small><b>Due Date:</b> {item.dueDate}</small></p>
+                  </div>
+
                 </div>
 
                 <div className='icon-box'>
@@ -158,7 +214,7 @@ const App = () => {
                 <div>
                   <h3>{item.title}</h3>
                   <p>{item.description}</p>
-                  <p><small>Completed On : {item.completedOn}</small></p>
+                  <p><small><b>Status :</b>Completed On {item.completedOn}</small></p>
                 </div>
 
                 <div>
